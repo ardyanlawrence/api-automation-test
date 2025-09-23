@@ -31,3 +31,11 @@ class ResponseValidator:
             assert response_json[key] == value, \
                 f"Expected '{key}' to be '{value}', but got '{response_json[key]}'"
         return True
+
+    @staticmethod
+    def validate_empty_data_array(response):
+        response_json = response.json()
+        assert "data" in response_json, "Response should contain 'data' key"
+        assert isinstance(response_json["data"], list), "Data should be a list"
+        assert len(response_json["data"]) == 0, "Data array should be empty"
+        return True

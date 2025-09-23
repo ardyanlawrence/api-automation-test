@@ -50,7 +50,6 @@ class TestReqResAPI:
         print("GET /users test passed")
 
     def test_create_user(self):
-        """Test membuat user baru - POSITIVE"""
         print("Testing POST /users - Positive Test")
         user_data = self.test_data.generate_user_data()
         response = self.client.post("/users", json=user_data)
@@ -61,19 +60,16 @@ class TestReqResAPI:
         self.validator.validate_response_contains(response, "job", user_data["job"])
         self.validator.validate_response_contains(response, "id")
         print(f"Response Data: {data}")
-        
-        print("✓ POST /users test passed")
+        print("POST /users test passed")
 
     # ========== NEGATIVE TESTS ==========
     def test_get_nonexistent_user(self):
-        """Test mendapatkan user yang tidak exist - NEGATIVE"""
         print("Testing GET /users/999 - Negative Test")
         response = self.client.get("/users/999")
         self.validator.validate_status_code(response, 404)
-        print("✓ GET non-existent user test passed")
+        print("GET non-existent user test passed")
 
     # ========== BOUNDARY TESTS ==========
-
     def test_get_first_user(self):
         """Test mendapatkan user pertama - BOUNDARY"""
         print("Testing GET /users/1 - Boundary Test")
@@ -81,7 +77,7 @@ class TestReqResAPI:
         self.validator.validate_status_code(response, 200)
         self.validator.validate_json_schema(response)
         self.validator.validate_response_contains(response, "data")
-        print("✓ GET first user test passed")
+        print("GET first user test passed")
 
     def test_get_last_user(self):
         """Test mendapatkan user terakhir - BOUNDARY"""
@@ -90,24 +86,20 @@ class TestReqResAPI:
         self.validator.validate_status_code(response, 200)
         self.validator.validate_json_schema(response)
         self.validator.validate_response_contains(response, "data")
-        print("✓ GET last user test passed")
-
+        print("GET last user test passed")
 
 # ==================== RUN TESTS ====================
 if __name__ == "__main__":
-    print("🚀 Starting API Automation Tests")
+    print("Starting API Automation Tests")
     print("=" * 60)
     print("Framework: Python with Requests and Pytest")
     print("API: ReqRes (https://reqres.in/)")
     print("Test Types: Positive, Negative, Boundary")
     print("=" * 60)
-
-    # Run tests menggunakan pytest
     exit_code = pytest.main([__file__, "-v", "--tb=short"])
-
     print("=" * 60)
     if exit_code == 0:
-        print("✅ All tests passed successfully!")
+        print("All tests passed successfully!")
     else:
-        print("❌ Some tests failed!")
+        print("Some tests failed!")
     print("=" * 60)
