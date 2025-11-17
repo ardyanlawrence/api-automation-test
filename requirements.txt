@@ -1,3 +1,5 @@
 pytest~=9.0.1
 Faker~=38.0.0
 requests~=2.32.5
+pytest-html
+pytest-json-report
