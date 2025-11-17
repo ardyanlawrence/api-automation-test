@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from faker import Faker
 from client import ApiClient
@@ -88,6 +90,7 @@ class TestReqResAPI:
         self.validator.validate_response_contains(response, "data")
         print("GET last user test passed")
 
+
 # ==================== RUN TESTS ====================
 if __name__ == "__main__":
     print("Starting API Automation Tests")
@@ -96,7 +99,15 @@ if __name__ == "__main__":
     print("API: ReqRes (https://reqres.in/)")
     print("Test Types: Positive, Negative, Boundary")
     print("=" * 60)
-    exit_code = pytest.main([__file__, "-v", "--tb=short"])
+    report_dir = "reports"
+    # os.makedirs(report_dir, exist_ok=True)
+    exit_code = pytest.main([__file__, "-v", "--tb=short",
+                             f"--html={report_dir}/test_report.html",
+                             "--self-contained-html",
+                             "--json-report",
+                             f"--json-report-file={report_dir}/test_report.json",
+                             "--json-report-indent=2"
+                             ])
     print("=" * 60)
     if exit_code == 0:
         print("All tests passed successfully!")
