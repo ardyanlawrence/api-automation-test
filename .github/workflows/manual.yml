@@ -1,0 +1,42 @@
+name: API Automation Workflow
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  run-automation-test:
+    runs-on: ubuntu-latest
+    steps:
+    # download repo
+      - uses: actions/checkout@v4
+    # Setup Python
+      - name: Set up Python 3.10
+      - uses: actions/setup-python@v6.0.0
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Execute Test
+        run:  python -m pytest main.py -v --tb=short --html=reports/test_report.html --self-contained-html --json-report --json-report-file=reports/test_report.json
+
+        # Archive Test Result
+      - name: Archive Test Result
+        uses: actions/upload-artifact@v5.0.0
+        if: always()
+        with:
+          name: PyTest Report
+          path: reports
+
+      # Deploy to Github Pages
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_DIR: reports
